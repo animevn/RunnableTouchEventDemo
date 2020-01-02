@@ -17,7 +17,6 @@ class ParticleSystem {
 
     @SuppressWarnings("SameParameterValue")
     void init(int numParticles){
-
         particles = new ArrayList<>();
 
         for (int i = 0; i < numParticles; i++) {

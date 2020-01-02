@@ -26,10 +26,10 @@ public class LiveDrawingView extends SurfaceView implements Runnable {
     private final ArrayList<ParticleSystem> particleSystems = new ArrayList<>();
     private int nextSystem = 0;
     private final int MAX_SYSTEMS = 1000;
-    private final int particlesPerSystem = 100;
+    private final int PARTICLES_PER_SYSTEM = 100;
     private Thread thread = null;
     private volatile boolean drawing;
-    private boolean pause = true;
+    private boolean pause = false;
     private final RectF buttonReset;
     private final RectF buttonTogglePause;
 
@@ -43,7 +43,7 @@ public class LiveDrawingView extends SurfaceView implements Runnable {
         buttonTogglePause = new RectF(300,450,400,550);
         for (int i = 0; i < MAX_SYSTEMS; i++) {
             particleSystems.add(new ParticleSystem());
-            particleSystems.get(i).init(particlesPerSystem);
+            particleSystems.get(i).init(PARTICLES_PER_SYSTEM);
         }
     }
 
@@ -71,7 +71,7 @@ public class LiveDrawingView extends SurfaceView implements Runnable {
         canvas.drawText("Systems: " + nextSystem,
                 10, fontMargin + debugStart + debugSize * 2, paint);
 
-        canvas.drawText("Particles: " + nextSystem * particlesPerSystem,
+        canvas.drawText("Particles: " + nextSystem * PARTICLES_PER_SYSTEM,
                 10, fontMargin + debugStart + debugSize * 3, paint);
     }
 
@@ -118,9 +118,7 @@ public class LiveDrawingView extends SurfaceView implements Runnable {
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
         // User moved a finger while touching screen
-        if ((motionEvent.getAction() &
-                MotionEvent.ACTION_MASK)
-                == MotionEvent.ACTION_MOVE) {
+        if ((motionEvent.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_MOVE) {
 
             particleSystems.get(nextSystem).emitParticles(
                     new PointF(motionEvent.getX(),
