@@ -4,30 +4,30 @@ import android.graphics.PointF;
 
 class Particle {
 
-    final PointF mVelocity;
-    final PointF mPosition;
+    final PointF velocity;
+    final PointF position;
 
     Particle(PointF direction) {
-        mVelocity = new PointF();
-        mPosition = new PointF();
+        velocity = new PointF();
+        position = new PointF();
 
         // Determine the direction
-        mVelocity.x = direction.x;
-        mVelocity.y = direction.y;
+        velocity.x = direction.x;
+        velocity.y = direction.y;
     }
 
     void update(float fps) {
         // Move the particle
-        mPosition.x += mVelocity.x;
-        mPosition.y += mVelocity.y;
+        position.x += velocity.x;
+        position.y += velocity.y;
     }
 
     void setPosition(PointF position) {
-        mPosition.x = position.x;
-        mPosition.y = position.y;
+        this.position.x = position.x;
+        this.position.y = position.y;
     }
 
     PointF getPosition() {
-        return mPosition;
+        return position;
     }
 }

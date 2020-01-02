@@ -9,16 +9,16 @@ import java.util.Random;
 
 class ParticleSystem {
 
-    private float mDuration;
+    private float duration;
 
-    private ArrayList<Particle> mParticles;
+    private ArrayList<Particle> particles;
     private final Random random = new Random();
-    boolean mIsRunning = false;
+    boolean isRunning = false;
 
     @SuppressWarnings("SameParameterValue")
     void init(int numParticles){
 
-        mParticles = new ArrayList<>();
+        particles = new ArrayList<>();
 
         for (int i = 0; i < numParticles; i++) {
             float angle = (random.nextInt(360)) ;
@@ -34,34 +34,35 @@ class ParticleSystem {
             direction = new PointF((float)Math.cos(angle) * speed,
                     (float)Math.sin(angle) * speed);
 
-            mParticles.add(new Particle(direction));
+            particles.add(new Particle(direction));
         }
     }
 
     void update(long fps){
-        mDuration -= (1f/fps);
+        duration -= (1f/fps);
 
-        for(Particle p : mParticles){p.update(fps);}
+        for(Particle p : particles){p.update(fps);}
 
-        if (mDuration < 0) {mIsRunning = false;}
+        if (duration < 0) {
+            isRunning = false;}
     }
 
     void emitParticles(PointF startPosition){
-        mIsRunning = true;
+        isRunning = true;
 
         // Option 1 - System lasts for half a minute
-        mDuration = 30f;
+        duration = 30f;
 
         // Option 2 - System lasts for 2 seconds
-        //mDuration = 3f;
+        //duration = 3f;
 
-        for(Particle p : mParticles) {p.setPosition(startPosition);}
+        for(Particle p : particles) {p.setPosition(startPosition);}
 
     }
 
     void draw(Canvas canvas, Paint paint) {
 
-        for (Particle p : mParticles) {
+        for (Particle p : particles) {
 
             // Option 1 - Coloured particles
             //paint.setARGB(255, random.nextInt(256),

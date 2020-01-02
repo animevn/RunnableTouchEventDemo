@@ -17,70 +17,69 @@ import java.util.ArrayList;
 @SuppressLint("ViewConstructor")
 public class LiveDrawingView extends SurfaceView implements Runnable {
 
-    private final SurfaceHolder mOurHolder;
-    private Canvas mCanvas;
-    private final Paint mPaint;
-    private long mFPS;
-    private final int mFontSize;
-    private final int mFontMargin;
-    private final ArrayList<ParticleSystem>
-            mParticleSystems = new ArrayList<>();
-    private int mNextSystem = 0;
+    private final SurfaceHolder surfaceHolder;
+    private Canvas canvas;
+    private final Paint paint;
+    private long fps;
+    private final int fontsize;
+    private final int fontMargin;
+    private final ArrayList<ParticleSystem> particleSystems = new ArrayList<>();
+    private int nextSystem = 0;
     private final int MAX_SYSTEMS = 1000;
-    private final int mParticlesPerSystem = 100;
-    private Thread mThread = null;
-    private volatile boolean mDrawing;
-    private boolean mPaused = true;
-    private final RectF mResetButton;
-    private final RectF mTogglePauseButton;
+    private final int particlesPerSystem = 100;
+    private Thread thread = null;
+    private volatile boolean drawing;
+    private boolean pause = true;
+    private final RectF buttonReset;
+    private final RectF buttonTogglePause;
 
     public LiveDrawingView(Context context, int x, int y) {
         super(context);
-        mFontSize = x /20;
-        mFontMargin = x /75;
-        mOurHolder = getHolder();
-        mPaint = new Paint();
-        mResetButton = new RectF(300,300,400,400);
-        mTogglePauseButton = new RectF(300,450,400,550);
+        fontsize = x /20;
+        fontMargin = x /75;
+        surfaceHolder = getHolder();
+        paint = new Paint();
+        buttonReset = new RectF(300,300,400,400);
+        buttonTogglePause = new RectF(300,450,400,550);
         for (int i = 0; i < MAX_SYSTEMS; i++) {
-            mParticleSystems.add(new ParticleSystem());
-            mParticleSystems.get(i).init(mParticlesPerSystem);
+            particleSystems.add(new ParticleSystem());
+            particleSystems.get(i).init(particlesPerSystem);
         }
     }
 
     private void draw() {
-        if (mOurHolder.getSurface().isValid()) {
-            mCanvas = mOurHolder.lockCanvas();
-            mCanvas.drawColor(Color.argb(255,0,0,0));
-            mPaint.setColor(Color.argb(255,255,255,255));
-            mPaint.setTextSize(mFontSize);
-            for (int i = 0; i < mNextSystem; i++) {
-                mParticleSystems.get(i).draw(mCanvas, mPaint);
+        if (surfaceHolder.getSurface().isValid()) {
+            canvas = surfaceHolder.lockCanvas();
+            canvas.drawColor(Color.argb(255,0,0,0));
+            paint.setColor(Color.argb(255,255,255,255));
+            paint.setTextSize(fontsize);
+            for (int i = 0; i < nextSystem; i++) {
+                particleSystems.get(i).draw(canvas, paint);
             }
-            mCanvas.drawRect(mResetButton, mPaint);
-            mCanvas.drawRect(mTogglePauseButton, mPaint);
+            canvas.drawRect(buttonReset, paint);
+            canvas.drawRect(buttonTogglePause, paint);
             printDebuggingText();
-            mOurHolder.unlockCanvasAndPost(mCanvas);
+            surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
 
     private void printDebuggingText() {
-        int debugSize = mFontSize/2;
+        int debugSize = fontsize /2;
         int debugStart = 150;
-        mPaint.setTextSize(debugSize);
-        mCanvas.drawText("FPS: " + mFPS, 10, debugStart + debugSize, mPaint);
-        mCanvas.drawText("Systems: " + mNextSystem,
-                10, mFontMargin + debugStart + debugSize * 2, mPaint);
+        paint.setTextSize(debugSize);
+        canvas.drawText("FPS: " + fps, 10, debugStart + debugSize, paint);
+        canvas.drawText("Systems: " + nextSystem,
+                10, fontMargin + debugStart + debugSize * 2, paint);
 
-        mCanvas.drawText("Particles: " + mNextSystem * mParticlesPerSystem,
-                10, mFontMargin + debugStart + debugSize * 3, mPaint);
+        canvas.drawText("Particles: " + nextSystem * particlesPerSystem,
+                10, fontMargin + debugStart + debugSize * 3, paint);
     }
 
     @Override
     public void run() {
-        while (mDrawing) {
+        while (drawing) {
             long frameStartTime = System.currentTimeMillis();
-            if (!mPaused) {
+            if (!pause) {
                 update();
             }
             draw();
@@ -88,30 +87,30 @@ public class LiveDrawingView extends SurfaceView implements Runnable {
 
             if (timeThisFrame > 0) {
                 int MILLIS_IN_SECOND = 1000;
-                mFPS = MILLIS_IN_SECOND /timeThisFrame;
+                fps = MILLIS_IN_SECOND /timeThisFrame;
             }
         }
     }
 
     private void update() {
-        for (int i = 0; i < mParticleSystems.size(); i++) {
-            if (mParticleSystems.get(i).mIsRunning) {
-                mParticleSystems.get(i).update(mFPS);
+        for (int i = 0; i < particleSystems.size(); i++) {
+            if (particleSystems.get(i).isRunning) {
+                particleSystems.get(i).update(fps);
             }
         }
     }
 
     public void pause() {
-        mDrawing = false;
+        drawing = false;
         try {
-            mThread.join();
+            thread.join();
         } catch (InterruptedException e) { Log.e("Error: ", "joining thread");}
     }
 
     public void resume() {
-        mDrawing = true;
-        mThread = new Thread(this);
-        mThread.start();
+        drawing = true;
+        thread = new Thread(this);
+        thread.start();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -123,13 +122,13 @@ public class LiveDrawingView extends SurfaceView implements Runnable {
                 MotionEvent.ACTION_MASK)
                 == MotionEvent.ACTION_MOVE) {
 
-            mParticleSystems.get(mNextSystem).emitParticles(
+            particleSystems.get(nextSystem).emitParticles(
                     new PointF(motionEvent.getX(),
                             motionEvent.getY()));
 
-            mNextSystem++;
-            if (mNextSystem == MAX_SYSTEMS) {
-                mNextSystem = 0;
+            nextSystem++;
+            if (nextSystem == MAX_SYSTEMS) {
+                nextSystem = 0;
             }
         }
 
@@ -139,16 +138,16 @@ public class LiveDrawingView extends SurfaceView implements Runnable {
                 == MotionEvent.ACTION_DOWN) {
 
             // User pressed the screen see if it was in a button
-            if (mResetButton.contains(motionEvent.getX(),
+            if (buttonReset.contains(motionEvent.getX(),
                     motionEvent.getY())) {
                 // Clear the screen of all particles
-                mNextSystem = 0;
+                nextSystem = 0;
             }
 
             // User pressed the screen see if it was in a button
-            if (mTogglePauseButton.contains(motionEvent.getX(),
+            if (buttonTogglePause.contains(motionEvent.getX(),
                     motionEvent.getY())) {
-                mPaused = !mPaused;
+                pause = !pause;
             }
         }
 

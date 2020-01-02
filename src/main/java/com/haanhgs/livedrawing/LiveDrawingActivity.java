@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.Display;
 
 public class LiveDrawingActivity extends Activity {
-    private LiveDrawingView mLiveDrawingView;
+    private LiveDrawingView liveDrawingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,21 +15,21 @@ public class LiveDrawingActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        mLiveDrawingView = new LiveDrawingView(this, size.x, size.y);
-        setContentView(mLiveDrawingView);
+        liveDrawingView = new LiveDrawingView(this, size.x, size.y);
+        setContentView(liveDrawingView);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mLiveDrawingView.resume();
+        liveDrawingView.resume();
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mLiveDrawingView.pause();
+        liveDrawingView.pause();
 
     }
 }
