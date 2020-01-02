@@ -1,5 +1,6 @@
 package com.haanhgs.livedrawing;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,34 +14,30 @@ import android.view.SurfaceView;
 
 import java.util.ArrayList;
 
+@SuppressLint("ViewConstructor")
 public class LiveDrawingView extends SurfaceView implements Runnable {
-    private final boolean DEBUGGING = true;
-    private SurfaceHolder mOurHolder;
+
+    private final SurfaceHolder mOurHolder;
     private Canvas mCanvas;
-    private Paint mPaint;
+    private final Paint mPaint;
     private long mFPS;
-    private final int MILLIS_IN_SECOND = 1000;
-    private int mScreenX;
-    private int mScreenY;
-    private int mFontSize;
-    private int mFontMargin;
-    private ArrayList<ParticleSystem>
+    private final int mFontSize;
+    private final int mFontMargin;
+    private final ArrayList<ParticleSystem>
             mParticleSystems = new ArrayList<>();
     private int mNextSystem = 0;
     private final int MAX_SYSTEMS = 1000;
-    private int mParticlesPerSystem = 100;
+    private final int mParticlesPerSystem = 100;
     private Thread mThread = null;
     private volatile boolean mDrawing;
     private boolean mPaused = true;
-    private RectF mResetButton;
-    private RectF mTogglePauseButton;
+    private final RectF mResetButton;
+    private final RectF mTogglePauseButton;
 
     public LiveDrawingView(Context context, int x, int y) {
         super(context);
-        mScreenX = x;
-        mScreenY = y;
-        mFontSize = mScreenX/20;
-        mFontMargin = mScreenX/75;
+        mFontSize = x /20;
+        mFontMargin = x /75;
         mOurHolder = getHolder();
         mPaint = new Paint();
         mResetButton = new RectF(300,300,400,400);
@@ -62,10 +59,8 @@ public class LiveDrawingView extends SurfaceView implements Runnable {
             }
             mCanvas.drawRect(mResetButton, mPaint);
             mCanvas.drawRect(mTogglePauseButton, mPaint);
-            if (DEBUGGING) {printDebuggingText();}
+            printDebuggingText();
             mOurHolder.unlockCanvasAndPost(mCanvas);
-
-
         }
     }
 
@@ -92,7 +87,8 @@ public class LiveDrawingView extends SurfaceView implements Runnable {
             long timeThisFrame = System.currentTimeMillis() - frameStartTime;
 
             if (timeThisFrame > 0) {
-                mFPS = MILLIS_IN_SECOND/timeThisFrame;
+                int MILLIS_IN_SECOND = 1000;
+                mFPS = MILLIS_IN_SECOND /timeThisFrame;
             }
         }
     }
@@ -118,6 +114,7 @@ public class LiveDrawingView extends SurfaceView implements Runnable {
         mThread.start();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 

@@ -4,8 +4,8 @@ import android.graphics.PointF;
 
 class Particle {
 
-    PointF mVelocity;
-    PointF mPosition;
+    final PointF mVelocity;
+    final PointF mPosition;
 
     Particle(PointF direction) {
         mVelocity = new PointF();

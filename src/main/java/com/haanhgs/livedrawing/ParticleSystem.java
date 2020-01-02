@@ -12,9 +12,10 @@ class ParticleSystem {
     private float mDuration;
 
     private ArrayList<Particle> mParticles;
-    private Random random = new Random();
+    private final Random random = new Random();
     boolean mIsRunning = false;
 
+    @SuppressWarnings("SameParameterValue")
     void init(int numParticles){
 
         mParticles = new ArrayList<>();
@@ -72,8 +73,8 @@ class ParticleSystem {
 
 
             // How big is each particle?
-            float sizeX = 0;
-            float sizeY = 0;
+            float sizeX;
+            float sizeY;
 
             // Option 1 - Big particles
             //sizeX = 25;
