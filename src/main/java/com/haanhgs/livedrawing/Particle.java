@@ -14,7 +14,8 @@ public class Particle {
         velocity.y = direction.y;
     }
 
-    public void update(float fps){
+    //recheck
+    public void update(){
         position.x += velocity.x;
         position.y += velocity.y;
     }
@@ -23,6 +24,7 @@ public class Particle {
         return position;
     }
 
+    //recheck
     public void setPosition(PointF position) {
         this.position.x = position.x;
         this.position.y = position.y;
