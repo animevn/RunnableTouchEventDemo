@@ -3,7 +3,6 @@ package com.haanhgs.livedrawing;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -65,7 +64,7 @@ public class Particles {
 //                    particle.getPosition().y + sizeY,
 //                    paint);
             //Circle particle
-            float radius = 3f;
+            float radius = 1f;
             canvas.drawCircle(particle.getPosition().x, particle.getPosition().y, radius, paint);
         }
     }

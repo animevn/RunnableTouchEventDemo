@@ -14,7 +14,7 @@ public class Particle {
         velocity.y = direction.y;
     }
 
-    //recheck
+    //recheck - point calculation
     public void update(){
         position.x += velocity.x;
         position.y += velocity.y;
@@ -24,7 +24,7 @@ public class Particle {
         return position;
     }
 
-    //recheck
+    //recheck - point calculation
     public void setPosition(PointF position) {
         this.position.x = position.x;
         this.position.y = position.y;
