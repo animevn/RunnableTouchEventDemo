@@ -3,6 +3,7 @@ package com.haanhgs.livedrawing;
 import android.app.Activity;
 import android.os.Bundle;
 
+//test
 public class LiveDrawingActivity extends Activity {
 
     private DrawingView drawingView;
