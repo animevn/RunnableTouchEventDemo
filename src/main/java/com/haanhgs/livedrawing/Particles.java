@@ -3,7 +3,6 @@ package com.haanhgs.livedrawing;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
