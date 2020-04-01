@@ -1,4 +1,4 @@
-package com.haanhgs.livedrawing;
+package com.haanhgs.surfaceview;
 
 import android.app.Activity;
 import android.os.Bundle;

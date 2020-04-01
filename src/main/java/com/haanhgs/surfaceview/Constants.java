@@ -1,4 +1,4 @@
-package com.haanhgs.livedrawing;
+package com.haanhgs.surfaceview;
 
 public class Constants {
     public static final float DURATION = 30f;

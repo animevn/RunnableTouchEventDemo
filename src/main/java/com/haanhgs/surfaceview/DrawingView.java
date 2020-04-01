@@ -1,4 +1,4 @@
-package com.haanhgs.livedrawing;
+package com.haanhgs.surfaceview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
